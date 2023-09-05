@@ -49,11 +49,11 @@ class BlogsController < ApplicationController
   end
 
   def authenticate_correct_owner
-    raise ActiveRecord::RecordNotFound unless @blog.user == current_user
+    raise ActiveRecord::RecordNotFound unless @blog.owned_by?(current_user)
   end
 
   def ensure_secret_blog_access
-    return if @blog.user == current_user
+    return if @blog.owned_by?(current_user)
 
     raise ActiveRecord::RecordNotFound if @blog.secret
   end
