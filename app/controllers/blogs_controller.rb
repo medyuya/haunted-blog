@@ -4,7 +4,6 @@ class BlogsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
   before_action :set_blog, only: %i[show]
   before_action :set_current_user_blog, only: %i[edit update destroy]
-  before_action :authenticate_correct_owner, only: %i[edit update destroy]
   before_action :ensure_secret_blog_access, only: %i[show]
 
   def index
@@ -51,10 +50,6 @@ class BlogsController < ApplicationController
 
   def set_current_user_blog
     @blog = current_user.blogs.find(params[:id])
-  end
-
-  def authenticate_correct_owner
-    raise ActiveRecord::RecordNotFound unless @blog.owned_by?(current_user)
   end
 
   def ensure_secret_blog_access
